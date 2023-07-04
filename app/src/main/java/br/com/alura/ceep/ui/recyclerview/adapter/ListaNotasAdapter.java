@@ -50,23 +50,27 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return notas.size();
     }
 
+    public void altera(int posicao, Nota nota) {
+        notas.set(posicao, nota);
+        notifyDataSetChanged();
+    }
+
     class NotaViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView titulo;
         private final TextView descricao;
         private Nota nota;
 
-        public NotaViewHolder(@NonNull View itemView) {
+
+        public NotaViewHolder(View itemView) {
             super(itemView);
             titulo = itemView.findViewById(R.id.item_nota_titulo);
             descricao = itemView.findViewById(R.id.item_nota_descricao);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onItemClick(nota);
-                }
+            itemView.setOnClickListener((view) -> {
+                onItemClickListener.onItemClick(nota, getAdapterPosition());
             });
         }
+
         public void vincula(Nota nota) {
             this.nota = nota;
             preencheCampos(nota);
