@@ -7,6 +7,7 @@ import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CODIGO_RESULT
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
+import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 
 public class ListaNotasActivity extends AppCompatActivity {
@@ -52,8 +54,10 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     private static List<Nota> pegaTodasNotas() {
         NotaDAO dao = new NotaDAO();
-        List<Nota> todasNotas = dao.todos();
-        return todasNotas;
+        for (int i = 0; i < 10; i++) {
+           dao.insere(new Nota("Título" + (i + 1),"Descrição" + (i + 1) ));
+        }
+        return dao.todos();
     }
 
     @Override
@@ -97,5 +101,13 @@ public class ListaNotasActivity extends AppCompatActivity {
     private void configuraAdapter(List<Nota> todasNotas, RecyclerView listaNotas) {
         adapter = new ListaNotasAdapter(this, todasNotas);
         listaNotas.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(Nota nota) {
+                Toast.makeText(ListaNotasActivity.this,
+                        nota.getTitulo(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
